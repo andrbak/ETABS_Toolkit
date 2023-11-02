@@ -28,6 +28,7 @@ using BH.oM.Adapter;
 using BH.oM.Base;
 using BH.oM.Adapter.Commands;
 using BH.oM.Structure.Loads;
+using System.Runtime.CompilerServices;
 
 #if Debug16 || Release16
 using ETABS2016;
@@ -51,13 +52,13 @@ namespace BH.Adapter.ETABS
         /***************************************************/
         /**** IAdapter Interface                        ****/
         /***************************************************/
-
+        
         public override Output<List<object>, bool> Execute(IExecuteCommand command, ActionConfig actionConfig = null)
         {
             var output = new Output<List<object>, bool>() { Item1 = null, Item2 = false };
 
             output.Item2 = RunCommand(command as dynamic);
-
+            
             return output;
         }
 
@@ -104,7 +105,7 @@ namespace BH.Adapter.ETABS
         }
 
         /***************************************************/
-
+        
         public bool RunCommand(Analyse command)
         {
             return Analyse();
@@ -144,6 +145,28 @@ namespace BH.Adapter.ETABS
             m_app = null;
             m_model = null;
             return success;
+        }
+
+
+        public bool RunCommand(CustomCommand command)
+        {
+
+            int result = 1;
+
+            if (command.Command == "DeleteGroup")
+            {
+
+                
+                
+                    result = m_app.SapModel.GroupDef.Delete((string)command.Parameters["GroupName"]);
+                
+
+                
+                
+            }
+
+            return (result == 0);
+            
         }
 
         /***************************************************/

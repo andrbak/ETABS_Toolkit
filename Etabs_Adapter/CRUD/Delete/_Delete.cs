@@ -101,6 +101,8 @@ namespace BH.Adapter.ETABS
                 foreach (string id in listIds)
                     count -= m_model.AreaObj.Delete(id);
 
+
+
             if (count != controlCount)
             {
                 Engine.Base.Compute.RecordWarning("Some of the requested delete operations failed.");
@@ -138,6 +140,25 @@ namespace BH.Adapter.ETABS
             }
 
             return base.Delete(request, actionConfig);
+        }
+
+
+        protected override int Delete(FilterRequest request, ActionConfig actionConfig = null)
+        {
+            // Get object ids
+            List<object> objectIds = new List<object>();
+            object idObject;
+            if (request.Equalities.TryGetValue("ObjectIds", out idObject))
+
+            {
+                objectIds = (List<object>)idObject;
+
+                // Delete 
+                return IDelete(request.Type, objectIds, actionConfig);
+            }
+
+            return 0;
+
         }
 
         /***************************************************/

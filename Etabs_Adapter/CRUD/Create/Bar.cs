@@ -103,7 +103,7 @@ namespace BH.Adapter.ETABS
                 etabsIdFragment.Story = story;
             }
 
-            if (m_model.AreaObj.GetGUID(name, ref guid) == 0)
+            if (m_model.FrameObj.GetGUID(name, ref guid) == 0)
                 etabsIdFragment.PersistentId = guid;
 
             bhBar.SetAdapterId(etabsIdFragment);
@@ -196,6 +196,18 @@ namespace BH.Adapter.ETABS
                     ret++;
                 }
             }
+
+
+                foreach (string gName in bhBar.Tags)
+                {
+                    string groupName = gName.ToString();
+                    if (m_model.FrameObj.SetGroupAssign(name, groupName) != 0)
+                    {
+                        m_model.GroupDef.SetGroup(groupName);
+                        m_model.FrameObj.SetGroupAssign(name, groupName);
+                    }
+                }
+
 
             return true;
         }
